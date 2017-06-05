@@ -1,6 +1,6 @@
 {
   "name": "fsm-as-promised",
-  "version": "0.14.3",
+  "version": "1.0.0",
   "description": "A minimalistic finite state machine library using promises",
   "author": {
     "name": "Vlad Stirbu",
@@ -10,8 +10,9 @@
   "main": "lib/index.js",
   "keywords": [
     "state machine",
-    "async",
-    "promises"
+    "final state machine",
+    "fsm",
+    "async"
   ],
   "repository": {
     "type": "git",
@@ -21,31 +22,27 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mocha",
-    "test-cov": "istanbul cover _mocha -- -R spec --check-leaks",
-    "test-travis": "istanbul cover _mocha --report lcovonly -- --reporter dot"
+    "test": "mocha --reporter spec --check-leaks test/**/*.js",
+    "test-cov": "nyc npm test",
+    "test-travis": "npm run test-cov -- -- --reporter dot && nyc report --reporter=lcov",
+    "coveralls": "coveralls",
+    "lint": "eslint lib/**/*.js",
+    "fmt": "eslint --fix --quiet {lib,test}/**/*.js -o /dev/null || true"
   },
   "dependencies": {
-    "es6-promise": "^4.0.2",
     "lodash": "^4.16.2",
     "stampit": "^3.0.1",
     "uuid": "^3.0.1"
   },
   "devDependencies": {
-    "bluebird": "^3.4.1",
     "chai": "^4.0.0",
-    "es6-shim": "^0.35.1",
-    "lie": "^3.0.4",
-    "mocha": "^3.1.0",
-    "native-promise-only": "^0.8.1",
-    "pinkie": "^2.0.4",
-    "promise": "^7.1.1",
-    "q": "^1.4.1",
-    "rsvp": "^3.2.1",
-    "sinon": "^2.0.0",
-    "when": "^3.7.7"
+    "coveralls": "^2.13.1",
+    "eslint": "^3.19.0",
+    "mocha": "^3.4.2",
+    "nyc": "^11.0.1",
+    "sinon": "^2.0.0"
   },
   "engines": {
-    "node": ">=4"
+    "node": ">=6"
   }
 }

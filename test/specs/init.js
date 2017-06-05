@@ -1,74 +1,49 @@
-module.exports = function (promise) {
+const StateMachine = require('../..');
+const expect = require('chai').expect;
 
-  describe('Initialisation', function () {
+describe('Initialisation', function() {
 
-    it('should default to "none" state', function () {
-      StateMachine.Promise = promise;
+  it('should default to "none" state', function() {
 
-      var fsm = StateMachine({
-        events: [
-          { name: 'start', from: 'one', to: 'another' }
-        ]
-      });
-
-      expect(fsm.current).to.be.equal('none');
+    const fsm = StateMachine({
+      events: [
+          {name: 'start', from: 'one', to: 'another'}
+      ]
     });
 
-    it('should initialize to provided state', function () {
-      StateMachine.Promise = promise;
+    expect(fsm.current).to.be.equal('none');
+  });
 
-      var fsm = StateMachine({
-        initial: 'green',
-        events: [
-          { name: 'warn',  from: 'green',  to: 'yellow' },
-          { name: 'panic', from: 'yellow', to: 'red'    },
-          { name: 'calm',  from: 'red',    to: 'yellow' },
-          { name: 'clear', from: 'yellow', to: 'green'  }
+  it('should initialize to provided state', function() {
+
+    const fsm = StateMachine({
+      initial: 'green',
+      events: [
+          {name: 'warn', from: 'green', to: 'yellow'},
+          {name: 'panic', from: 'yellow', to: 'red'},
+          {name: 'calm', from: 'red', to: 'yellow'},
+          {name: 'clear', from: 'yellow', to: 'green'}
       ]});
 
-      expect(fsm.current).to.be.equal('green');
-    });
-
-    it('should throw error on transition with array value for \'to\'', function (done) {
-      StateMachine.Promise = promise;
-
-      try {
-        var fsm = StateMachine({
-          initial: 'here',
-          events: [
-            { name: 'jump', from: 'here', to: ['here', 'there'] }
-          ]
-        });
-      } catch (e) {
-        expect(e.message).to.be.equal('Ambigous transition');
-        expect(e.trigger).to.be.equal('jump');
-        expect(e.current).to.be.equal('here');
-
-        done();
-      }
-    });
-
-    it('should use the configured promise library', function (done) {
-      StateMachine.Promise = promise;
-      
-      var usedPromise = StateMachine.Promise;
-
-      var fsm = StateMachine({
-        initial: 'init',
-        events: [
-          { name: 'test', from: 'init' }
-        ],
-        callbacks: {
-          ontest: function (options) {
-            expect(usedPromise).to.be.deep.equal(promise);
-            expect(StateMachine.Promise).to.be.deep.equal(promise);
-          }
-        }
-      });
-
-      fsm.test().then(function () {
-        done();
-      });
-    });
+    expect(fsm.current).to.be.equal('green');
   });
-}
+
+  it('should throw error on transition with array value for \'to\'', function(done) {
+
+
+    try {
+      const fsm = StateMachine({
+        initial: 'here',
+        events: [
+            {name: 'jump', from: 'here', to: ['here', 'there']}
+        ]
+      });
+    } catch (e) {
+      expect(e.message).to.be.equal('Ambigous transition');
+      expect(e.trigger).to.be.equal('jump');
+      expect(e.current).to.be.equal('here');
+
+      done();
+    }
+  });
+});
